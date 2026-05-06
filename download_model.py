@@ -8,7 +8,7 @@ if getattr(sys, 'frozen', False):
 else:
     base_path = os.path.dirname(os.path.abspath(__file__))
 
-MODEL_URL = "заглушка"
+MODEL_URL = "https://huggingface.co/Andycurrent/Gemma-3-4B-VL-it-Gemini-Pro-Heretic-Uncensored-Thinking_GGUF/resolve/main/Gemma-3-4B-VL-it-Gemini-Pro-Heretic-Uncensored-Thinking_Q4_k_m.gguf"
 
 MODEL_FILENAME = MODEL_URL.split("/")[-1]
 
