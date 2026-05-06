@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from model import generate_text_response
 
 app = FastAPI()
 
@@ -21,7 +22,9 @@ class ChatResponse(BaseModel):
 
 @app.post("/chat", response_model=ChatResponse)
 def chat(req: ChatRequest):
+    messages = [{"role": "user", "content": req.message}]
+    assistant_text = generate_text_response(messages=messages)
     return ChatResponse(
         user_message=req.message,
-        assistant_message="эхо: " + req.message
+        assistant_message=assistant_text
     )
