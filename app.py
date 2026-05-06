@@ -15,6 +15,9 @@ app.add_middleware(
 
 class ChatRequest(BaseModel):
     message: str
+    temperature: float = 0.7
+    system_prompt: str = "Ты — полезный ассистент."
+    max_tokens: int = 150
 
 class ChatResponse(BaseModel):
     user_message: str
@@ -22,8 +25,15 @@ class ChatResponse(BaseModel):
 
 @app.post("/chat", response_model=ChatResponse)
 def chat(req: ChatRequest):
-    messages = [{"role": "user", "content": req.message}]
-    assistant_text = generate_text_response(messages=messages)
+    messages = [
+        {"role": "system", "content": req.system_prompt},
+        {"role": "user", "content": req.message}
+    ]
+    assistant_text = generate_text_response(
+        messages=messages,
+        temperature=req.temperature,
+        max_tokens=req.max_tokens
+    )
     return ChatResponse(
         user_message=req.message,
         assistant_message=assistant_text
