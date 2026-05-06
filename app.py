@@ -55,6 +55,9 @@ def chat(req: ChatRequest):
         temperature=req.temperature,
         max_tokens=req.max_tokens
     )
+    assistant_text = _clean(assistant_text)
+    from model import _clean
+    
     conversations[conv_id].append((req.message, assistant_text))
     return ChatResponse(
         conversation_id=conv_id,
