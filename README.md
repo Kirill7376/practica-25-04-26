@@ -39,7 +39,7 @@ markdown
 
 ### 1. Скачайте проект
 ```bash
-git clone https://github.com/твой-логин/llm-chat.git
+git clone https://github.com/Kirill7376/llm-chat.git
 cd llm-chat
 ```
 Или просто скачайте ZIP-архив и распакуйте в любую папку.
