@@ -1,7 +1,6 @@
 import os
 import sys
 from llama_cpp import Llama
-from model import generate_text_response, _clean
 
 if getattr(sys, 'frozen', False):
     base_path = os.path.dirname(sys.executable)
