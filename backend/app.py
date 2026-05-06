@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from model import generate_text_response, _clean
+from pydantic import BaseModel, field_validator
 
 app = FastAPI()
 
@@ -23,10 +24,17 @@ class ChatRequest(BaseModel):
     system_prompt: str = "Ты — полезный ассистент."
     max_tokens: int = 150
 
+    @field_validator('message')
+    def message_not_empty(cls, v):
+        if not v.strip():
+            raise ValueError('Сообщение не может быть пустым')
+        return v
+
 class ChatResponse(BaseModel):
     conversation_id: int
     user_message: str
     assistant_message: str
+    
 
 def build_messages(conv_id: int, system_prompt: str):
     history = conversations.get(conv_id, [])
