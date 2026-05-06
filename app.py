@@ -74,3 +74,10 @@ def get_conversation(conv_id: int):
         if assistant_msg:
             messages.append({"role": "assistant", "content": assistant_msg})
     return {"id": conv_id, "messages": messages}
+    
+@app.delete("/conversations/{conv_id}")
+def delete_conversation(conv_id: int):
+    if conv_id not in conversations:
+        raise HTTPException(status_code=404)
+    del conversations[conv_id]
+    return {"ok": True}
