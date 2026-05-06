@@ -21,10 +21,23 @@ llm = Llama(
     verbose=False
 )
 
+TOKENS = [
+    "<|end_of_turn|>", "<|start_of_turn|>",
+    "<|user|>", "<|assistant|>", "<|system|>",
+    "</s>", "<s>", "<|eot_id|>", "<|end|>"
+]
+
+def _clean(text: str) -> str:
+    for token in TOKENS:
+        if token in text:
+            text = text.split(token)[0].strip()
+    return text
+
 def generate_text_response(messages: list, temperature=0.7, max_tokens=150):
     output = llm.create_chat_completion(
         messages=messages,
         temperature=temperature,
         max_tokens=max_tokens,
+        stop=TOKENS,
     )
-    return output['choices'][0]['message']['content']
+    return _clean(output['choices'][0]['message']['content'])
