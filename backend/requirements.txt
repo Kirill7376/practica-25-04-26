@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sqlalchemy
+llama-cpp-python
+duckduckgo_search
+pydantic
+python-multipart
+pytest
+httpx
