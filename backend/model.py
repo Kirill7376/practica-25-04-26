@@ -1,3 +1,6 @@
+# type: ignore
+import download_model 
+download_model.main()
 import os
 import sys
 from llama_cpp import Llama
