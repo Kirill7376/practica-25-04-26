@@ -64,5 +64,13 @@ def chat(req: ChatRequest):
     )
 
 @app.get("/conversations")
-def list_conversations():
-    return [{"id": cid, "messages_count": len(hist)} for cid, hist in conversations.items()]
+def get_conversation(conv_id: int):
+    if conv_id not in conversations:
+        raise HTTPException(status_code=404)
+    history = conversations[conv_id]
+    messages = []
+    for user_msg, assistant_msg in history:
+        messages.append({"role": "user", "content": user_msg})
+        if assistant_msg:
+            messages.append({"role": "assistant", "content": assistant_msg})
+    return {"id": conv_id, "messages": messages}
