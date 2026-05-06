@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from model import generate_text_response
+from model import generate_text_response, _clean
 
 app = FastAPI()
 
@@ -56,11 +56,13 @@ def chat(req: ChatRequest):
         max_tokens=req.max_tokens
     )
     assistant_text = _clean(assistant_text)
-    from model import _clean
-    
     conversations[conv_id].append((req.message, assistant_text))
     return ChatResponse(
         conversation_id=conv_id,
         user_message=req.message,
         assistant_message=assistant_text
     )
+
+@app.get("/conversations")
+def list_conversations():
+    return [{"id": cid, "messages_count": len(hist)} for cid, hist in conversations.items()]
