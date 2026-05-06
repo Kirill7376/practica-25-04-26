@@ -8,3 +8,14 @@ models/
 .idea/
 .dart_tool/
 build/
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/chat.db
+backend/models/*.gguf
+backend/models/*.bin
+
+chat_app/build/
+chat_app/.dart_tool/
+chat_app/.flutter-plugins*
+chat_app/pubspec.lock
