@@ -94,4 +94,24 @@ class ApiService {
   Future<void> deleteConversation(int id) async {
     await http.delete(Uri.parse('$baseUrl/conversations/$id'));
   }
+
+  Future<void> setDbMode(String mode) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/settings/db_mode'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'mode': mode}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to switch DB mode');
+    }
+  }
+
+  Future<String> getDbMode() async {
+    final response = await http.get(Uri.parse('$baseUrl/settings/db_mode'));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)['mode'];
+    } else {
+      throw Exception('Failed to get DB mode');
+    }
+  }
 }
