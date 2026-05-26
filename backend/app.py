@@ -5,6 +5,8 @@ from database import SessionLocal, Conversation, Message
 from model import generate_text_response # type: ignore
 from fastapi.middleware.cors import CORSMiddleware
 from duckduckgo_search import DDGS
+from DB_OP import set_db_mode, get_db_mode
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -52,6 +54,9 @@ class SearchResponse(BaseModel):
     user_query: str
     assistant_message: str
     sources: list[str]
+
+class DbModeRequest(BaseModel):
+    mode: str
 
 def perform_search(query: str) -> tuple[str, list[str]]:
     """Выполняет поиск и возвращает (сниппеты, источники)."""
@@ -234,6 +239,18 @@ def delete_conversation(conv_id: int, db: Session = Depends(get_db)):
     db.delete(conv)
     db.commit()
     return {"ok": True}
+
+@app.post("/settings/db_mode")
+def set_db_mode_endpoint(req: DbModeRequest):
+    try:
+        set_db_mode(req.mode)
+        return {"mode": req.mode, "message": f"Database mode switched to {req.mode}"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/settings/db_mode")
+def get_db_mode_endpoint():
+    return {"mode": get_db_mode()}
 
 if __name__ == "__main__":
     import uvicorn
